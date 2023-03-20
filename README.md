@@ -19,8 +19,8 @@
     - SUM149PT Parent clone, DMSO treated
     - SUM149PT C2 clone, DMSO treated
 
-2. Build a minimalistic pipeline to trim the reads with `fastp`,
-   align the reads with `STAR`, and
+2. Build a reproducible pipeline to trim the reads with `fastp`,
+   align the trimmmed reads with `STAR`, and
    quantify the expression profiles with `rsem`.
 
 3. Describe key steps that need to be added to the pipeline so that 
