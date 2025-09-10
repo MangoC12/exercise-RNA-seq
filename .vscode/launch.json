@@ -1,0 +1,57 @@
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+// .vscode/launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "bashdb",
+      "request": "launch",
+      "name": "Bash Debug: pipeline.sh (WSL)",
+      "program": "${workspaceFolder}/Scripts/pipeline.sh",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "terminalKind": "integrated",
+      "pathBash": "/usr/bin/bash",
+      "env": {
+        "THREADS": "6"
+      }
+    },
+    {
+      "type": "bashdb",
+      "request": "launch",
+      "name": "Bash Debug: pipeline.sh (Conda PATH)",
+      "program": "${workspaceFolder}/Scripts/pipeline.sh",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "terminalKind": "integrated",
+      "pathBash": "/usr/bin/bash",
+      "env": {
+        // Why: 将 Conda env 的 bin 放到 PATH 前面，这样 STAR/rsem/fastp 等从 env 中取用
+        "PATH": "${env:HOME}/miniconda3/envs/RNAseq_env/bin:${env:PATH}",
+        "CONDA_PREFIX": "${env:HOME}/miniconda3/envs/RNAseq_env"
+      }
+    },
+    {
+      "type": "bashdb",
+      "request": "launch",
+      "name": "Bash Debug: pipeline (Conda wrapper)",
+      "program": "${workspaceFolder}/Scripts/pipeline_safe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "terminalKind": "integrated",
+      "pathBash": "/usr/bin/bash"
+    },
+    {
+      "type": "bashdb",
+      "request": "launch",
+      "name": "Bash Debug: 当前文件",
+      "program": "${file}",
+      "args": [],
+      "cwd": "${fileDirname}",
+      "terminalKind": "integrated",
+      "pathBash": "/usr/bin/bash"
+    }
+  ]
+}

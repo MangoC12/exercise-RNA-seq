@@ -2,12 +2,28 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-#activate conda environment //conda activate RNAseq_env
+#activate conda environment
+#conda init
+#conda activate RNAseq_env
 
 # 解压出基因组 FASTA
-gunzip -c ref/GRCh38.primary_assembly.genome.fa.gz > ref/genome.fa
-gunzip -c ref/gencode.v42.transcripts.fa.gz > ref/transcripts.fa
-gunzip -c ref/gencode.v42.annotation.gtf.gz > ref/annotation.gtf
+if [ ! -s ref/genome.fa ]; then
+    gunzip -c ref/GRCh38.primary_assembly.genome.fa.gz > ref/genome.fa
+else
+    echo "skipping"
+fi
+
+if [ ! -s ref/transcripts.fa ]; then
+    gunzip -c ref/gencode.v42.transcripts.fa.gz > ref/transcripts.fa
+else
+    echo "skipping"
+fi
+
+if [ ! -s ref/annotation.gtf ]; then
+    gunzip -c ref/gencode.v42.annotation.gtf.gz > ref/annotation.gtf
+else
+    echo "skipping"
+fi
 
 # Reference files
 GENOME_FA="ref/genome.fa"
@@ -34,7 +50,9 @@ if [ ! -s ${STAR_INDEX}/Genome ]; then
        --genomeDir "$STAR_INDEX" \
        --genomeFastaFiles "$GENOME_FA" \
        --sjdbGTFfile "$GTF" \
-       --sjdbOverhang 100
+       --sjdbOverhang 100 \
+       --limitGenomeGenerateRAM 24000000000 \
+       --genomeSAindexNbases 12
 else
   echo "[STAR] Index exists. Skipping."
 fi
@@ -60,6 +78,7 @@ if [ ${#SAMPLES[@]} -eq 0 ]; then
 fi
 
 # 4. 循环：fastp 修剪 → RSEM+STAR 对齐定量
+for SAMPLE in \"${SAMPLES[@]}\"; 
 do
   echo "=== Processing sample: $SAMPLE ==="
 
@@ -113,7 +132,6 @@ do
   else
     echo "[RSEM] ${SAMPLE} results exist. Skipping."
   fi
-
 done
 
 # 5. 结果汇总（计数矩阵 & TPM矩阵）
