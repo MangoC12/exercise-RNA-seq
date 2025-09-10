@@ -6,7 +6,7 @@ IFS=$'\n\t'
 #conda init
 #conda activate RNAseq_env
 
-# 解压出基因组 FASTA
+# gunzip reference files if not already done
 if [ ! -s ref/genome.fa ]; then
     gunzip -c ref/GRCh38.primary_assembly.genome.fa.gz > ref/genome.fa
 else
